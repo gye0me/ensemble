@@ -1,0 +1,658 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>성격 테스트 결과 - 앙상블 스타즈</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --main-color: #3b82f6;
+            --bg-gradient: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            --shadow: 0 20px 60px rgba(59, 130, 246, 0.1);
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: var(--bg-gradient);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .result-box {
+            background: white;
+            border-radius: 30px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            animation: popIn 0.6s cubic-bezier(0.36, 0, 0.66, 1);
+        }
+        
+        .result-header {
+            background: linear-gradient(135deg, var(--main-color), #ff3399);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .chemistry-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .result-header h2 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            opacity: 0.95;
+        }
+        
+        .result-body {
+            padding: 40px 30px;
+        }
+        
+        .partner-name {
+            font-size: 2.2em;
+            color: var(--main-color);
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-align: center;
+        }
+        
+        .partner-unit {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--main-color), #ff3399);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.95em;
+            font-weight: 600;
+            margin-bottom: 30px;
+            display: block;
+            text-align: center;
+        }
+        
+        .personality-section {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--main-color);
+        }
+        
+        .personality-section h3 {
+            color: var(--main-color);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .personality-section p {
+            line-height: 1.8;
+            color: #666;
+            font-size: 0.95em;
+        }
+        
+        .description-section {
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border-left: 4px solid #4da6ff;
+            line-height: 1.8;
+            color: #333;
+        }
+        
+        .description-section strong {
+            color: #0055aa;
+        }
+        
+        .compatibility-scores {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .score-item {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .score-label {
+            font-size: 0.9em;
+            color: #999;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .score-bar {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        
+        .score-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--main-color), #ff3399);
+            border-radius: 10px;
+            transition: width 0.6s ease;
+        }
+        
+        .score-value {
+            font-size: 1.2em;
+            color: var(--main-color);
+            font-weight: 700;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--main-color), #ff3399);
+            color: white;
+            box-shadow: 0 8px 20px rgba(255, 0, 85, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(255, 0, 85, 0.4);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--main-color);
+            border: 2px solid var(--main-color);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--main-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* 태블릿 및 모바일 최적화 */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            .result-box {
+                border-radius: 20px;
+            }
+
+            .result-header {
+                padding: 30px 20px;
+            }
+            
+            .result-body {
+                padding: 25px 20px;
+            }
+
+            .chemistry-badge {
+                font-size: 1em;
+                padding: 10px 20px;
+                margin-bottom: 12px;
+            }
+
+            .result-header h2 {
+                font-size: 1.1em;
+            }
+            
+            .partner-name {
+                font-size: 1.8em;
+                margin-bottom: 8px;
+            }
+
+            .partner-unit {
+                font-size: 0.9em;
+                padding: 6px 16px;
+            }
+
+            .personality-section,
+            .description-section {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+
+            .personality-section h3 {
+                font-size: 1em;
+                margin-bottom: 8px;
+            }
+
+            .personality-section p {
+                font-size: 0.9em;
+            }
+
+            .description-section {
+                font-size: 0.9em;
+            }
+            
+            .compatibility-scores {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin-bottom: 20px;
+            }
+
+            .score-item {
+                padding: 12px;
+            }
+
+            .score-label {
+                font-size: 0.85em;
+                margin-bottom: 6px;
+            }
+
+            .score-value {
+                font-size: 1.1em;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 25px;
+            }
+            
+            .btn {
+                width: 100%;
+                min-width: auto;
+                padding: 12px 16px;
+                font-size: 0.95em;
+            }
+
+            img[alt] {
+                max-width: 200px !important;
+                height: 250px !important;
+                margin-bottom: 25px !important;
+            }
+
+            body {
+                padding: 10px;
+            }
+        }
+
+        /* 작은 모바일 (480px 이하) */
+        @media (max-width: 480px) {
+            .result-box {
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(255, 0, 85, 0.1);
+            }
+
+            .result-header {
+                padding: 20px 15px;
+            }
+            
+            .result-body {
+                padding: 20px 15px;
+            }
+
+            .chemistry-badge {
+                font-size: 0.9em;
+                padding: 8px 16px;
+                margin-bottom: 10px;
+            }
+
+            .result-header h2 {
+                font-size: 1em;
+                margin-bottom: 8px;
+            }
+            
+            .partner-name {
+                font-size: 1.5em;
+                margin-bottom: 6px;
+            }
+
+            .partner-unit {
+                font-size: 0.85em;
+                padding: 5px 14px;
+                margin-bottom: 20px;
+            }
+
+            .personality-section,
+            .description-section {
+                padding: 12px;
+                margin-bottom: 15px;
+                border-radius: 10px;
+            }
+
+            .personality-section h3 {
+                font-size: 0.95em;
+                margin-bottom: 6px;
+            }
+
+            .personality-section p {
+                font-size: 0.85em;
+                line-height: 1.5;
+            }
+
+            .description-section {
+                font-size: 0.85em;
+                line-height: 1.6;
+                padding: 12px;
+            }
+            
+            .compatibility-scores {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                margin-bottom: 18px;
+            }
+
+            .score-item {
+                padding: 10px;
+                border-radius: 8px;
+            }
+
+            .score-label {
+                font-size: 0.8em;
+                margin-bottom: 5px;
+            }
+
+            .score-bar {
+                height: 6px;
+                margin-bottom: 6px;
+            }
+
+            .score-value {
+                font-size: 1em;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                gap: 8px;
+                margin-top: 20px;
+            }
+            
+            .btn {
+                width: 100%;
+                padding: 11px 14px;
+                font-size: 0.9em;
+                border-radius: 20px;
+            }
+
+            .btn {
+                width: 100%;
+                padding: 11px 14px;
+                font-size: 0.9em;
+                border-radius: 20px;
+            }
+
+            img[alt] {
+                max-width: 160px !important;
+                height: 200px !important;
+                margin-bottom: 20px !important;
+                border-radius: 12px !important;
+            }
+
+            body {
+                padding: 8px;
+            }
+        }
+
+        /* 강아지 데코레이션 */
+        .dog-decoration {
+            position: fixed;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .dog-top-right {
+            top: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+        }
+
+        .dog-bottom-left {
+            bottom: 40px;
+            left: 30px;
+            width: 75px;
+            height: 75px;
+            opacity: 0.6;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-15px) rotate(-2deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        (function(){
+            const Audioctx = window.AudioContext || window.webkitAudioContext;
+            let ctx;
+            function getCtx(){ if(!ctx) ctx = new Audioctx(); return ctx; }
+
+            function playChime(){
+                const c = getCtx(); const now = c.currentTime;
+                const master = c.createGain(); master.connect(c.destination);
+                master.gain.setValueAtTime(0, now);
+                master.gain.linearRampToValueAtTime(0.07, now + 0.02);
+                master.gain.linearRampToValueAtTime(0, now + 0.9);
+
+                const freqs = [440, 660, 880];
+                freqs.forEach((f,i)=>{
+                    const o = c.createOscillator(); o.type='triangle'; o.frequency.setValueAtTime(f, now + i*0.09);
+                    o.connect(master); o.start(now + i*0.09); o.stop(now + i*0.09 + 0.5);
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', ()=>{
+                try{ playChime(); }catch(e){}
+            });
+        })();
+    </script>
+    <!-- 강아지 데코레이션 -->
+    <svg class="dog-decoration dog-top-right" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="100" cy="110" rx="55" ry="58" fill="#fdd835" stroke="#f9a825" stroke-width="2"/>
+        <ellipse cx="60" cy="55" rx="18" ry="35" fill="#f9a825" stroke="#f57c00" stroke-width="2" transform="rotate(-20 60 55)"/>
+        <ellipse cx="62" cy="58" rx="10" ry="20" fill="#ffb74d" transform="rotate(-20 62 58)"/>
+        <ellipse cx="140" cy="55" rx="18" ry="35" fill="#f9a825" stroke="#f57c00" stroke-width="2" transform="rotate(20 140 55)"/>
+        <ellipse cx="138" cy="58" rx="10" ry="20" fill="#ffb74d" transform="rotate(20 138 58)"/>
+        <ellipse cx="100" cy="110" rx="8" ry="10" fill="#2c2c2c"/>
+        <path d="M 100 110 Q 95 125 85 120" stroke="#2c2c2c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M 100 110 Q 105 125 115 120" stroke="#2c2c2c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <circle cx="80" cy="95" r="8" fill="white" stroke="#333" stroke-width="1.5"/>
+        <circle cx="80" cy="96" r="5" fill="#2c2c2c"/>
+        <circle cx="81" cy="94" r="2" fill="white"/>
+        <circle cx="120" cy="95" r="8" fill="white" stroke="#333" stroke-width="1.5"/>
+        <circle cx="120" cy="96" r="5" fill="#2c2c2c"/>
+        <circle cx="121" cy="94" r="2" fill="white"/>
+        <circle cx="55" cy="110" r="12" fill="#ffb74d" opacity="0.5"/>
+        <circle cx="145" cy="110" r="12" fill="#ffb74d" opacity="0.5"/>
+        <ellipse cx="100" cy="128" rx="6" ry="8" fill="#ff6b9d"/>
+        <path d="M 145 125 Q 165 100 160 70" stroke="#f9a825" stroke-width="12" fill="none" stroke-linecap="round"/>
+        <path d="M 145 125 Q 165 100 160 70" stroke="#fdd835" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.8"/>
+    </svg>
+
+    <svg class="dog-decoration dog-bottom-left" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="100" cy="110" rx="55" ry="58" fill="#fdd835" stroke="#f9a825" stroke-width="2"/>
+        <ellipse cx="60" cy="55" rx="18" ry="35" fill="#f9a825" stroke="#f57c00" stroke-width="2" transform="rotate(-20 60 55)"/>
+        <ellipse cx="62" cy="58" rx="10" ry="20" fill="#ffb74d" transform="rotate(-20 62 58)"/>
+        <ellipse cx="140" cy="55" rx="18" ry="35" fill="#f9a825" stroke="#f57c00" stroke-width="2" transform="rotate(20 140 55)"/>
+        <ellipse cx="138" cy="58" rx="10" ry="20" fill="#ffb74d" transform="rotate(20 138 58)"/>
+        <ellipse cx="100" cy="110" rx="8" ry="10" fill="#2c2c2c"/>
+        <path d="M 100 110 Q 95 125 85 120" stroke="#2c2c2c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M 100 110 Q 105 125 115 120" stroke="#2c2c2c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <circle cx="80" cy="95" r="8" fill="white" stroke="#333" stroke-width="1.5"/>
+        <circle cx="80" cy="96" r="5" fill="#2c2c2c"/>
+        <circle cx="81" cy="94" r="2" fill="white"/>
+        <circle cx="120" cy="95" r="8" fill="white" stroke="#333" stroke-width="1.5"/>
+        <circle cx="120" cy="96" r="5" fill="#2c2c2c"/>
+        <circle cx="121" cy="94" r="2" fill="white"/>
+        <circle cx="55" cy="110" r="12" fill="#ffb74d" opacity="0.5"/>
+        <circle cx="145" cy="110" r="12" fill="#ffb74d" opacity="0.5"/>
+        <ellipse cx="100" cy="128" rx="6" ry="8" fill="#ff6b9d"/>
+    </svg>
+
+    <div class="container">
+        <div class="result-box">
+            <div class="result-header">
+                <div class="chemistry-badge">💕 Compatibility <%= chemistry %>%</div>
+                <h2>당신의 운명의 파트너는?</h2>
+            </div>
+            
+            <div class="result-body">
+                <% if (partner.image) { %>
+                    <img src="/images/<%= partner.image %>.png" alt="<%= partner.name %>" style="width: 100%; max-width: 250px; height: 300px; object-fit: cover; border-radius: 15px; margin: 0 auto 30px; display: block; box-shadow: 0 10px 30px rgba(255, 0, 85, 0.15);">
+                <% } %>
+                <div class="partner-name"><%= partner.name %></div>
+                <div class="partner-unit">[<%= partner.unit %>]</div>
+                
+                <div class="personality-section">
+                    <h3>📖 캐릭터 성격</h3>
+                    <p><%= partner.personality %></p>
+                </div>
+                
+                <div class="description-section">
+                    <strong>✨ 왜 당신과 맞을까요?</strong><br>
+                    <%= partner.description %>
+                </div>
+                
+                <div class="compatibility-scores">
+                    <div class="score-item">
+                        <div class="score-label">당신의 열정</div>
+                        <div class="score-bar">
+                            <div class="score-fill" style="width: <%= (user.passion / 10) * 100 %>%"></div>
+                        </div>
+                        <div class="score-value"><%= user.passion.toFixed(1) %>/10</div>
+                    </div>
+                    
+                    <div class="score-item">
+                        <div class="score-label">파트너의 열정</div>
+                        <div class="score-bar">
+                            <div class="score-fill" style="width: <%= (partner.scores.passion / 10) * 100 %>%"></div>
+                        </div>
+                        <div class="score-value"><%= partner.scores.passion %>/10</div>
+                    </div>
+                    
+                    <div class="score-item">
+                        <div class="score-label">당신의 우아함</div>
+                        <div class="score-bar">
+                            <div class="score-fill" style="width: <%= (user.elegance / 10) * 100 %>%"></div>
+                        </div>
+                        <div class="score-value"><%= user.elegance.toFixed(1) %>/10</div>
+                    </div>
+                    
+                    <div class="score-item">
+                        <div class="score-label">파트너의 우아함</div>
+                        <div class="score-bar">
+                            <div class="score-fill" style="width: <%= (partner.scores.elegance / 10) * 100 %>%"></div>
+                        </div>
+                        <div class="score-value"><%= partner.scores.elegance %>/10</div>
+                    </div>
+                    
+                    <div class="score-item">
+                        <div class="score-label">당신의 지성</div>
+                        <div class="score-bar">
+                            <div class="score-fill" style="width: <%= (user.intelligence / 10) * 100 %>%"></div>
+                        </div>
+                        <div class="score-value"><%= user.intelligence.toFixed(1) %>/10</div>
+                    </div>
+                    
+                    <div class="score-item">
+                        <div class="score-label">파트너의 지성</div>
+                        <div class="score-bar">
+                            <div class="score-fill" style="width: <%= (partner.scores.intelligence / 10) * 100 %>%"></div>
+                        </div>
+                        <div class="score-value"><%= partner.scores.intelligence %>/10</div>
+                    </div>
+                    
+                    <div class="score-item">
+                        <div class="score-label">당신의 충성</div>
+                        <div class="score-bar">
+                            <div class="score-fill" style="width: <%= (user.loyalty / 10) * 100 %>%"></div>
+                        </div>
+                        <div class="score-value"><%= user.loyalty.toFixed(1) %>/10</div>
+                    </div>
+                    
+                    <div class="score-item">
+                        <div class="score-label">파트너의 충성</div>
+                        <div class="score-bar">
+                            <div class="score-fill" style="width: <%= (partner.scores.loyalty / 10) * 100 %>%"></div>
+                        </div>
+                        <div class="score-value"><%= partner.scores.loyalty %>/10</div>
+                    </div>
+                    
+                    <div class="score-item">
+                        <div class="score-label">당신의 자유</div>
+                        <div class="score-bar">
+                            <div class="score-fill" style="width: <%= (user.freedom / 10) * 100 %>%"></div>
+                        </div>
+                        <div class="score-value"><%= user.freedom.toFixed(1) %>/10</div>
+                    </div>
+                    
+                    <div class="score-item">
+                        <div class="score-label">파트너의 자유</div>
+                        <div class="score-bar">
+                            <div class="score-fill" style="width: <%= (partner.scores.freedom / 10) * 100 %>%"></div>
+                        </div>
+                        <div class="score-value"><%= partner.scores.freedom %>/10</div>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <a href="/" class="btn btn-secondary">다시 테스트하기</a>
+                    <a href="/" class="btn btn-primary">처음으로</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

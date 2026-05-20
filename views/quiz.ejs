@@ -1,0 +1,587 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>앙상블 스타즈 성격 테스트 - 내 운명의 파트너는?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --main-color: #3b82f6;
+            --bg-gradient: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            --shadow: 0 20px 60px rgba(59, 130, 246, 0.1);
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: var(--bg-gradient);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            color: var(--main-color);
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(255, 0, 85, 0.1);
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            color: #666;
+        }
+        
+        .progress-bar {
+            background: #eee;
+            height: 6px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--main-color), #ff3399);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        .form-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+        
+        .q-card {
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        .q-card:last-child {
+            border-bottom: none;
+        }
+        
+        .category-label {
+            display: none;
+            background: var(--main-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .q-number {
+            display: inline-block;
+            background: var(--main-color);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 36px;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 0.9em;
+        }
+        
+        .q-text {
+            display: inline-block;
+            font-size: 1.05em;
+            font-weight: 600;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 25px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .hint {
+            font-size: 0.85em;
+            color: #999;
+            font-weight: 600;
+            text-align: center;
+            flex: 0 0 12%;
+            min-width: 60px;
+        }
+        
+        .hint.left { flex: 0 0 18%; }
+        .hint.right { flex: 0 0 18%; }
+        
+        .option-label {
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 45px;
+            transition: 0.3s;
+        }
+        
+        .option-label:hover .circle {
+            transform: scale(1.2);
+        }
+        
+        .option-label input {
+            display: none;
+        }
+        
+        .circle {
+            border: 3px solid #ddd;
+            border-radius: 50%;
+            background: #fff;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .opt-1 .circle { width: 50px; height: 50px; }
+        .opt-2 .circle { width: 42px; height: 42px; }
+        .opt-3 .circle { width: 34px; height: 34px; }
+        .opt-4 .circle { width: 42px; height: 42px; }
+        .opt-5 .circle { width: 50px; height: 50px; }
+        
+        .option-label input:checked + .circle {
+            background: var(--main-color);
+            border-color: var(--main-color);
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.4);
+            transform: scale(1.15);
+        }
+        
+        button {
+            background: linear-gradient(135deg, var(--main-color), #ff3399);
+            color: #fff;
+            border: none;
+            padding: 16px 40px;
+            width: 100%;
+            max-width: 300px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            display: block;
+            margin: 40px auto 0;
+            box-shadow: 0 8px 20px rgba(255, 0, 85, 0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(255, 0, 85, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(-1px);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* 모바일 반응형 (태블릿 이하) */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            .header {
+                margin-bottom: 30px;
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+                margin-bottom: 8px;
+            }
+
+            .header p {
+                font-size: 0.95em;
+            }
+
+            .form-container {
+                padding: 20px;
+                margin-bottom: 20px;
+                border-radius: 15px;
+            }
+
+            .q-card {
+                margin-bottom: 25px;
+                padding-bottom: 25px;
+            }
+
+            .q-number {
+                width: 30px;
+                height: 30px;
+                line-height: 30px;
+                font-size: 0.85em;
+                margin-right: 8px;
+            }
+
+            .q-text {
+                font-size: 0.95em;
+                line-height: 1.5;
+            }
+
+            .options {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+                margin-top: 20px;
+            }
+
+            .hint {
+                display: none;
+            }
+
+            .hint.left,
+            .hint.right {
+                display: none;
+            }
+
+            .option-label {
+                flex: 1;
+                padding: 10px;
+                border: 2px solid #eee;
+                border-radius: 10px;
+                text-align: left;
+                flex-direction: row;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .option-label:hover {
+                background: #f9f9f9;
+            }
+
+            .option-label input:checked + .circle {
+                box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
+            }
+
+            .opt-1 .circle { width: 40px; height: 40px; }
+            .opt-2 .circle { width: 40px; height: 40px; }
+            .opt-3 .circle { width: 40px; height: 40px; }
+            .opt-4 .circle { width: 40px; height: 40px; }
+            .opt-5 .circle { width: 40px; height: 40px; }
+
+            button {
+                max-width: none;
+                padding: 14px 30px;
+                font-size: 1.1em;
+                margin: 30px auto 0;
+                width: 90%;
+            }
+
+            body {
+                padding: 10px;
+            }
+        }
+
+        /* 작은 모바일 (480px 이하) */
+        @media (max-width: 480px) {
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            .header {
+                margin-bottom: 20px;
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+                margin-bottom: 5px;
+            }
+
+            .header p {
+                font-size: 0.9em;
+            }
+
+            .form-container {
+                padding: 15px;
+                margin-bottom: 15px;
+                border-radius: 12px;
+            }
+
+            .progress-bar {
+                height: 5px;
+                margin-bottom: 25px;
+            }
+
+            .q-card {
+                margin-bottom: 20px;
+                padding-bottom: 20px;
+            }
+
+            .category-label {
+                font-size: 0.75em;
+                padding: 4px 12px;
+                margin-bottom: 8px;
+            }
+
+            .q-number {
+                width: 28px;
+                height: 28px;
+                line-height: 28px;
+                font-size: 0.8em;
+                margin-right: 6px;
+            }
+
+            .q-text {
+                font-size: 0.9em;
+                line-height: 1.4;
+            }
+
+            .option-label {
+                padding: 8px;
+                border-radius: 8px;
+                gap: 8px;
+                font-size: 0.9em;
+            }
+
+            .opt-1 .circle { width: 35px; height: 35px; }
+            .opt-2 .circle { width: 35px; height: 35px; }
+            .opt-3 .circle { width: 35px; height: 35px; }
+            .opt-4 .circle { width: 35px; height: 35px; }
+            .opt-5 .circle { width: 35px; height: 35px; }
+
+            button {
+                max-width: none;
+                padding: 12px 24px;
+                font-size: 1em;
+                margin: 25px auto 0;
+                width: 95%;
+            }
+
+            body {
+                padding: 8px;
+            }
+        }
+
+        /* 강아지 데코레이션 */
+        .dog-decoration {
+            position: fixed;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .dog-top-left {
+            top: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+        }
+
+        .dog-bottom-right {
+            bottom: 30px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+            opacity: 0.6;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-15px) rotate(2deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 강아지 데코레이션 -->
+    <svg class="dog-decoration dog-top-left" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="100" cy="110" rx="55" ry="58" fill="#fdd835" stroke="#f9a825" stroke-width="2"/>
+        <ellipse cx="60" cy="55" rx="18" ry="35" fill="#f9a825" stroke="#f57c00" stroke-width="2" transform="rotate(-20 60 55)"/>
+        <ellipse cx="62" cy="58" rx="10" ry="20" fill="#ffb74d" transform="rotate(-20 62 58)"/>
+        <ellipse cx="140" cy="55" rx="18" ry="35" fill="#f9a825" stroke="#f57c00" stroke-width="2" transform="rotate(20 140 55)"/>
+        <ellipse cx="138" cy="58" rx="10" ry="20" fill="#ffb74d" transform="rotate(20 138 58)"/>
+        <ellipse cx="100" cy="110" rx="8" ry="10" fill="#2c2c2c"/>
+        <path d="M 100 110 Q 95 125 85 120" stroke="#2c2c2c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M 100 110 Q 105 125 115 120" stroke="#2c2c2c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <circle cx="80" cy="95" r="8" fill="white" stroke="#333" stroke-width="1.5"/>
+        <circle cx="80" cy="96" r="5" fill="#2c2c2c"/>
+        <circle cx="81" cy="94" r="2" fill="white"/>
+        <circle cx="120" cy="95" r="8" fill="white" stroke="#333" stroke-width="1.5"/>
+        <circle cx="120" cy="96" r="5" fill="#2c2c2c"/>
+        <circle cx="121" cy="94" r="2" fill="white"/>
+        <circle cx="55" cy="110" r="12" fill="#ffb74d" opacity="0.5"/>
+        <circle cx="145" cy="110" r="12" fill="#ffb74d" opacity="0.5"/>
+        <ellipse cx="100" cy="128" rx="6" ry="8" fill="#ff6b9d"/>
+    </svg>
+
+    <svg class="dog-decoration dog-bottom-right" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="100" cy="110" rx="55" ry="58" fill="#fdd835" stroke="#f9a825" stroke-width="2"/>
+        <ellipse cx="60" cy="55" rx="18" ry="35" fill="#f9a825" stroke="#f57c00" stroke-width="2" transform="rotate(-20 60 55)"/>
+        <ellipse cx="62" cy="58" rx="10" ry="20" fill="#ffb74d" transform="rotate(-20 62 58)"/>
+        <ellipse cx="140" cy="55" rx="18" ry="35" fill="#f9a825" stroke="#f57c00" stroke-width="2" transform="rotate(20 140 55)"/>
+        <ellipse cx="138" cy="58" rx="10" ry="20" fill="#ffb74d" transform="rotate(20 138 58)"/>
+        <ellipse cx="100" cy="110" rx="8" ry="10" fill="#2c2c2c"/>
+        <path d="M 100 110 Q 95 125 85 120" stroke="#2c2c2c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M 100 110 Q 105 125 115 120" stroke="#2c2c2c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <circle cx="80" cy="95" r="8" fill="white" stroke="#333" stroke-width="1.5"/>
+        <circle cx="80" cy="96" r="5" fill="#2c2c2c"/>
+        <circle cx="81" cy="94" r="2" fill="white"/>
+        <circle cx="120" cy="95" r="8" fill="white" stroke="#333" stroke-width="1.5"/>
+        <circle cx="120" cy="96" r="5" fill="#2c2c2c"/>
+        <circle cx="121" cy="94" r="2" fill="white"/>
+        <circle cx="55" cy="110" r="12" fill="#ffb74d" opacity="0.5"/>
+        <circle cx="145" cy="110" r="12" fill="#ffb74d" opacity="0.5"/>
+        <ellipse cx="100" cy="128" rx="6" ry="8" fill="#ff6b9d"/>
+        <path d="M 145 125 Q 165 100 160 70" stroke="#f9a825" stroke-width="12" fill="none" stroke-linecap="round"/>
+        <path d="M 145 125 Q 165 100 160 70" stroke="#fdd835" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.8"/>
+    </svg>
+
+    <div class="container">
+        <div class="header">
+            <h1>✨ MY DESTINY PARTNER ✨</h1>
+            <p>당신의 성격과 어울리는 앙상블 스타즈 캐릭터를 찾아보세요!</p>
+        </div>
+        
+        <div class="form-container">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 100%"></div>
+            </div>
+            
+            <form action="/match" method="POST" id="quizForm">
+                <% 
+                const questions = [
+                    // Passion (열정) - p1~p5
+                    { category: '열정', id: 'p1', q: '라이브 도중 갑작스러운 음향 사고! 당신이 바라는 무대 위 대처는?', l: '침착하게 수습', r: '애드리브로 정면돌파' },
+                    { category: '열정', id: 'p2', q: '솔로 파트를 연습하는 아이돌의 등 뒤에서 느껴졌으면 하는 아우라는?', l: '진지하고 은은함', r: '활기차고 이글거림' },
+                    { category: '열정', id: 'p3', q: '다음 합동 라이브 기획을 제안받았을 때, 당신이 선호하는 유닛의 성향은?', l: '안정적인 조화', r: '폭발적인 무대 장악력' },
+                    { category: '열정', id: 'p4', q: '어려운 안무 미션을 받았을 때, 당신이 선호하는 파트너의 행동은?', l: '동작을 쪼개며 분석', r: '일단 몸으로 부딪히기' },
+                    { category: '열정', id: 'p5', q: '무대 커튼콜이 내려간 직후, 파트너와 나누고 싶은 감정은?', l: '안도감과 잔잔한 여운', r: '아드레날린과 뜨거운 전율' },
+                    
+                    // Elegance (우아함) - e1~e5
+                    { category: '우아함', id: 'e1', q: '이번 시즌 유닛의 뉴 비주얼 콘셉트를 고른다면?', l: '캐주얼 & 스트릿', r: '클래식 & 하이클래스' },
+                    { category: '우아함', id: 'e2', q: '팬들에게 보내는 공식 인터뷰나 감사 메시지에서 중요한 톤앤매너는?', l: '친근하고 다정한 말투', r: '기품 있고 정중한 태도' },
+                    { category: '우아함', id: 'e3', q: '쉬는 날, 파트너와 함께 보낼 완벽한 휴일을 고른다면?', l: '게임방이나 맛집 탐방', r: '미술관 관람이나 티타임' },
+                    { category: '우아함', id: 'e4', q: '무대 위 윙크나 팬서비스(오프쇼)에 대한 당신의 생각은?', l: '자유로운 스웩이 최고', r: '각도와 매너까지 완벽해야 함' },
+                    { category: '우아함', id: 'e5', q: 'ES 빌딩 복도에서 마주친 당신의 파트너에게서 났으면 하는 향기는?', l: '비누나 은은한 섬유유연제', r: '고급스럽고 세련된 향수' },
+                    
+                    // Intelligence (지성) - i1~i5
+                    { category: '지성', id: 'i1', q: '팬들의 피드백이나 모니터링 데이터를 분석할 때 당신의 방식은?', l: '직관과 감성으로 파악', r: '차트와 통계로 냉정하게 분석' },
+                    { category: '지성', id: 'i2', q: '유닛의 새로운 세계관 스토리를 짤 때, 당신이 더 끌리는 서사는?', l: '감성을 자극하는 성장 드라마', r: '복선이 숨겨진 치밀한 추리극' },
+                    { category: '지성', id: 'i3', q: '파트너와 깊은 대화를 나눌 때 더 통했으면 하는 부분은?', l: '감정적인 공감과 위로', r: '논리적인 피드백과 아이디어' },
+                    { category: '지성', id: 'i4', q: '예산이 한정된 상황에서 대형 무대 연출을 기획해야 한다면?', l: '아이돌의 스타성으로 정면승부', r: '철저한 계산과 특수효과 배치' },
+                    { category: '지성', id: 'i5', q: '파트너에게 가장 기대하는 최고의 스펙(Spec)은?', l: '현장을 녹이는 무대 천재력', r: '영리하게 무대를 설계하는 브레인' },
+                    
+                    // Loyalty (충성) - l1~l5
+                    { category: '충성', id: 'l1', q: '서로를 향한 신뢰의 깊이를 확인하는 순간은?', l: '자유롭게 각자의 길을 존중할 때', r: '어떤 위기에도 곁을 지켜줄 때' },
+                    { category: '충성', id: 'l2', q: '유닛 멤버들끼리의 규칙이나 약속에 대해 어떻게 생각하나요?', l: '유동적으로 조율 가능', r: '반드시 사수해야 하는 철칙' },
+                    { category: '충성', id: 'l3', q: '파트너가 유닛을 대하는 바람직한 태도는?', l: '개인의 개성을 살리는 솔로 플레이어', r: '공동의 목표를 위해 헌신하는 팀플레이어' },
+                    { category: '충성', id: 'l4', q: '연습실에 가장 먼저 도착해 불을 켜는 파트너를 보았을 때 드는 생각은?', l: '성실하네! (기본적인 느낌)', r: '정말 든든하고 신뢰가 가! (깊은 감동)' },
+                    { category: '충성', id: 'l5', q: '스케줄이 꼬여 파트너가 무리한 대타 무대를 소화해야 한다면?', l: '컨디션을 조절해가며 적당히', r: '자신의 이름을 걸고 완벽하게 책임짐' },
+                    
+                    // Freedom (자유) - f1~f5
+                    { category: '자유', id: 'f1', q: '당일 야외 촬영인데 갑자기 폭우가 쏟아진다면?', l: '실내 스튜디오 대안 고수', r: '비 콘셉트의 즉흥 촬영으로 변경' },
+                    { category: '자유', id: 'f2', q: '아이돌의 철저한 식단 관리와 데일리 루틴에 대한 당신의 견해는?', l: '계획대로 엄격하게 유지', r: '스트레스 받지 않게 유연하게 힐링' },
+                    { category: '자유', id: 'f3', q: 'ES 빌딩의 빡빡한 가이드라인과 규칙을 볼 때 드는 생각은?', l: '안전을 위해 꼭 필요함', r: '때로는 창의성을 가로막아 답답함' },
+                    { category: '자유', id: 'f4', q: '새로운 장르(예: 국악 혼합 힙합 등)의 곡을 마주했을 때 당신은?', l: '검증된 스타일인지 검토 후 진행', r: '재밌겠는데? 일단 녹음실로 직행' },
+                    { category: '자유', id: 'f5', q: '예상치 못한 게릴라 라이브나 깜짝 버스킹 제안을 받는다면?', l: '리스크가 크니 다음 기회에', r: '이게 바로 아이돌의 짜릿함! 당장 진행' }
+                ];
+                %>
+
+                <% questions.forEach((item, index) => { %>
+                    <div class="q-card">
+                        <span class="category-label"><%= item.category %></span>
+                        <span class="q-number"><%= index + 1 %></span><span class="q-text"><%= item.q %></span>
+                        <div class="options">
+                            <span class="hint left"><%= item.l %></span>
+                            <label class="option-label opt-1"><input type="radio" name="<%= item.id %>" value="0" required><div class="circle"></div></label>
+                            <label class="option-label opt-2"><input type="radio" name="<%= item.id %>" value="2.5"><div class="circle"></div></label>
+                            <label class="option-label opt-3"><input type="radio" name="<%= item.id %>" value="5"><div class="circle"></div></label>
+                            <label class="option-label opt-4"><input type="radio" name="<%= item.id %>" value="7.5"><div class="circle"></div></label>
+                            <label class="option-label opt-5"><input type="radio" name="<%= item.id %>" value="10" required><div class="circle"></div></label>
+                            <span class="hint right"><%= item.r %></span>
+                        </div>
+                    </div>
+                <% }); %>
+
+                <button type="submit">나의 운명의 파트너 찾기</button>
+            </form>
+            <script>
+                (function(){
+                    const Audioctx = window.AudioContext || window.webkitAudioContext;
+                    let ctx;
+                    function getCtx(){ if(!ctx) ctx = new Audioctx(); return ctx; }
+
+                    function playClick(){
+                        const c = getCtx();
+                        const o = c.createOscillator();
+                        const g = c.createGain();
+                        o.type = 'square'; o.frequency.value = 900;
+                        g.gain.value = 0.02;
+                        o.connect(g); g.connect(c.destination);
+                        o.start(); setTimeout(()=>{ o.stop(); }, 60);
+                    }
+
+                    function playSubmit(){
+                        const c = getCtx(); const now = c.currentTime;
+                        const master = c.createGain(); master.connect(c.destination);
+                        master.gain.setValueAtTime(0, now);
+                        master.gain.linearRampToValueAtTime(0.06, now + 0.01);
+                        master.gain.linearRampToValueAtTime(0, now + 0.35);
+                        const o = c.createOscillator(); o.type='sine'; o.frequency.setValueAtTime(440, now);
+                        o.connect(master); o.start(now); o.stop(now + 0.35);
+                    }
+
+                    document.addEventListener('DOMContentLoaded', ()=>{
+                        // 클릭/선택 사운드
+                        document.querySelectorAll('label.option-label').forEach(el=>{
+                            el.addEventListener('click', ()=>{ try{ playClick(); }catch(e){} });
+                        });
+
+                        const form = document.getElementById('quizForm');
+                        if(form){
+                            form.addEventListener('submit', (e)=>{
+                                try{ playSubmit(); }catch(e){}
+                            });
+                        }
+                    });
+                })();
+            </script>
+        </div>
+    </div>
+</body>
+</html>

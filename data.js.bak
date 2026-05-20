@@ -1,0 +1,89 @@
+const characters = [
+    // Trickstar
+    { name: "히다카 호쿠토", unit: "Trickstar", scores: { e: 3, s: 9, t: 8, p: 2, rule: 10 } },
+    { name: "아케호시 스바루", unit: "Trickstar", scores: { e: 10, s: 4, t: 2, p: 9, rule: 3 } },
+    { name: "유우키 마코토", unit: "Trickstar", scores: { e: 5, s: 8, t: 7, p: 5, rule: 7 } },
+    { name: "이사라 마오", unit: "Trickstar", scores: { e: 8, s: 7, t: 6, p: 4, rule: 9 } },
+    
+    // fine
+    { name: "텐쇼인 에이치", unit: "fine", scores: { e: 7, s: 6, t: 10, p: 4, rule: 8 } },
+    { name: "히비키 와타루", unit: "fine", scores: { e: 10, s: 2, t: 5, p: 10, rule: 1 } },
+    { name: "후시미 유즈루", unit: "fine", scores: { e: 4, s: 9, t: 8, p: 2, rule: 10 } },
+    { name: "히메미야 토리", unit: "fine", scores: { e: 8, s: 5, t: 4, p: 7, rule: 4 } },
+    
+    // UNDEAD
+    { name: "사쿠마 레이", unit: "UNDEAD", scores: { e: 5, s: 3, t: 9, p: 7, rule: 4 } },
+    { name: "하카제 카오루", unit: "UNDEAD", scores: { e: 9, s: 4, t: 5, p: 9, rule: 2 } },
+    { name: "오토가리 아도니스", unit: "UNDEAD", scores: { e: 3, s: 7, t: 4, p: 5, rule: 9 } },
+    { name: "오오가미 코가", unit: "UNDEAD", scores: { e: 7, s: 6, t: 3, p: 8, rule: 5 } },
+    
+    // Knights
+    { name: "츠키나가 레오", unit: "Knights", scores: { e: 9, s: 1, t: 4, p: 10, rule: 2 } },
+    { name: "세나 이즈미", unit: "Knights", scores: { e: 4, s: 8, t: 9, p: 3, rule: 7 } },
+    { name: "사쿠마 리츠", unit: "Knights", scores: { e: 2, s: 4, t: 7, p: 8, rule: 3 } },
+    { name: "나루카미 아라시", unit: "Knights", scores: { e: 8, s: 6, t: 3, p: 6, rule: 6 } },
+    { name: "스오우 츠카사", unit: "Knights", scores: { e: 6, s: 7, t: 8, p: 2, rule: 10 } },
+    
+    // 유성대
+    { name: "모리사와 치아키", unit: "유성대", scores: { e: 10, s: 5, t: 3, p: 6, rule: 9 } },
+    { name: "신카이 카나타", unit: "유성대", scores: { e: 4, s: 2, t: 4, p: 9, rule: 5 } },
+    { name: "나구모 테토라", unit: "유성대", scores: { e: 8, s: 7, t: 5, p: 4, rule: 8 } },
+    { name: "센고쿠 시노부", unit: "유성대", scores: { e: 2, s: 5, t: 4, p: 7, rule: 7 } },
+    { name: "타카미네 미도리", unit: "유성대", scores: { e: 1, s: 6, t: 5, p: 3, rule: 6 } },
+    
+    // Ra*bits
+    { name: "니토 나즈나", unit: "Ra*bits", scores: { e: 7, s: 7, t: 6, p: 4, rule: 8 } },
+    { name: "마시로 토모야", unit: "Ra*bits", scores: { e: 6, s: 9, t: 5, p: 5, rule: 9 } },
+    { name: "시노 하지메", unit: "Ra*bits", scores: { e: 4, s: 6, t: 3, p: 4, rule: 8 } },
+    { name: "텐마 미츠루", unit: "Ra*bits", scores: { e: 10, s: 3, t: 2, p: 10, rule: 4 } },
+    
+    // 2wink
+    { name: "아오이 히나타", unit: "2wink", scores: { e: 9, s: 5, t: 5, p: 8, rule: 5 } },
+    { name: "아오이 유우타", unit: "2wink", scores: { e: 7, s: 6, t: 7, p: 6, rule: 6 } },
+    
+    // 홍월
+    { name: "하스미 케이토", unit: "홍월", scores: { e: 3, s: 9, t: 10, p: 1, rule: 10 } },
+    { name: "키류 쿠로", unit: "홍월", scores: { e: 6, s: 8, t: 6, p: 4, rule: 9 } },
+    { name: "칸자키 소마", unit: "홍월", scores: { e: 5, s: 7, t: 4, p: 3, rule: 10 } },
+    
+    // Valkyrie
+    { name: "이츠키 슈", unit: "Valkyrie", scores: { e: 2, s: 4, t: 9, p: 2, rule: 8 } },
+    { name: "카게히라 미카", unit: "Valkyrie", scores: { e: 3, s: 5, t: 2, p: 7, rule: 7 } },
+    
+    // Switch
+    { name: "사카사키 나츠메", unit: "Switch", scores: { e: 5, s: 3, t: 9, p: 8, rule: 4 } },
+    { name: "아오바 츠무기", unit: "Switch", scores: { e: 6, s: 7, t: 5, p: 4, rule: 8 } },
+    { name: "하루카와 소라", unit: "Switch", scores: { e: 8, s: 2, t: 3, p: 10, rule: 5 } },
+    
+    // MaM / Double Face
+    { name: "미케지마 마다라", unit: "MaM", scores: { e: 9, s: 5, t: 8, p: 9, rule: 4 } },
+    { name: "코하쿠 오우카와", unit: "Double Face", scores: { e: 5, s: 8, t: 7, p: 4, rule: 8 } },
+    
+    // Eden
+    { name: "란 나기사", unit: "Eden", scores: { e: 3, s: 3, t: 8, p: 5, rule: 7 } },
+    { name: "토모에 히요리", unit: "Eden", scores: { e: 9, s: 4, t: 6, p: 8, rule: 5 } },
+    { name: "사에구사 이바라", unit: "Eden", scores: { e: 8, s: 9, t: 10, p: 2, rule: 9 } },
+    { name: "사자나미 쥰", unit: "Eden", scores: { e: 5, s: 8, t: 7, p: 4, rule: 7 } },
+    
+    // ALKALOID
+    { name: "아마기 히이로", unit: "ALKALOID", scores: { e: 8, s: 6, t: 5, p: 4, rule: 10 } },
+    { name: "시라토리 아이라", unit: "ALKALOID", scores: { e: 7, s: 8, t: 4, p: 6, rule: 7 } },
+    { name: "아야세 마요이", unit: "ALKALOID", scores: { e: 1, s: 4, t: 6, p: 5, rule: 8 } },
+    { name: "카제하야 타츠미", unit: "ALKALOID", scores: { e: 6, s: 7, t: 8, p: 4, rule: 9 } },
+    
+    // Spri
+    { name: "사기리 에스", unit: "ALKALOID", scores: { e: 8, s: 6, t: 5, p: 4, rule: 10 } },
+    { name: "나츠 칸나", unit: "ALKALOID", scores: { e: 7, s: 8, t: 4, p: 6, rule: 7 } },
+    { name: "하나무라 후유메", unit: "ALKALOID", scores: { e: 1, s: 4, t: 6, p: 5, rule: 8 } },
+    { name: "호죠 라이카", unit: "ALKALOID", scores: { e: 6, s: 7, t: 8, p: 4, rule: 9 } },
+
+    // Mellow Dear Us
+    { name: "}
+    // Crazy:B
+    { name: "아마기 린네", unit: "Crazy:B", scores: { e: 10, s: 5, t: 7, p: 10, rule: 2 } },
+    { name: "HiMERU", unit: "Crazy:B", scores: { e: 5, s: 8, t: 9, p: 3, rule: 8 } },
+    { name: "오우카와 코하쿠", unit: "Crazy:B", scores: { e: 5, s: 8, t: 7, p: 4, rule: 8 } },
+    { name: "시이키 린네", unit: "Crazy:B", scores: { e: 8, s: 6, t: 4, p: 9, rule: 4 } }
+];
+
+module.exports = characters;
