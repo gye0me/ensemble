@@ -1,0 +1,4 @@
+node_modules/
+*.bak
+.DS_Store
+*.loggit commit -m "Initial commit"

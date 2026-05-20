@@ -1,66 +1,135 @@
 ﻿const express = require('express');
-const app = express();
+const path = require('path');
+
 const characters = require('./data');
 
-app.set('view engine', 'ejs');
-app.use(express.static('public'));
-app.use(express.urlencoded({ extended: true }));
+const app = express();
 
+// body parser
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+// ejs
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// static
+app.use(express.static('public'));
+
+// 시작 페이지
 app.get('/', (req, res) => {
     res.render('start');
 });
 
+// 퀴즈 페이지
 app.get('/quiz', (req, res) => {
     res.render('quiz');
 });
 
+// 결과 계산
 app.post('/match', (req, res) => {
-    try {
-        const b = req.body;
 
-        // 사용자의 5가지 성격 특성 계산 (0~10점 척도)
-        // passion(열정), elegance(우아함), intelligence(지성), loyalty(충성), freedom(자유)
-        const user = {
-            passion: (parseFloat(b.p1) + parseFloat(b.p2) + parseFloat(b.p3) + parseFloat(b.p4) + parseFloat(b.p5)) / 5,
-            elegance: (parseFloat(b.e1) + parseFloat(b.e2) + parseFloat(b.e3) + parseFloat(b.e4) + parseFloat(b.e5)) / 5,
-            intelligence: (parseFloat(b.i1) + parseFloat(b.i2) + parseFloat(b.i3) + parseFloat(b.i4) + parseFloat(b.i5)) / 5,
-            loyalty: (parseFloat(b.l1) + parseFloat(b.l2) + parseFloat(b.l3) + parseFloat(b.l4) + parseFloat(b.l5)) / 5,
-            freedom: (parseFloat(b.f1) + parseFloat(b.f2) + parseFloat(b.f3) + parseFloat(b.f4) + parseFloat(b.f5)) / 5
-        };
+    const userAnswers = req.body;
 
-        let bestPartner = null;
-        let maxScore = -1;
+    // 평균 계산 함수
+    const avg = (arr) =>
+        arr.reduce((sum, v) => sum + Number(v || 0), 0) / arr.length;
 
-        // 캐릭터와 유저의 호환도 계산
-        characters.forEach(char => {
-            let score = 100;
+    // 사용자 성향
+    const userProfile = {
 
-            // 각 특성별로 차이를 계산하고 가중치 적용
-            score -= Math.abs(user.passion - char.scores.passion) * 2;     // 열정 매칭
-            score -= Math.abs(user.elegance - char.scores.elegance) * 2;   // 우아함 매칭
-            score -= Math.abs(user.intelligence - char.scores.intelligence) * 2; // 지성 매칭
-            score -= Math.abs(user.loyalty - char.scores.loyalty) * 3;     // 충성 매칭 (중요도 높음)
-            score -= Math.abs(user.freedom - char.scores.freedom) * 2;     // 자유 매칭
+        passion: avg([
+            userAnswers.p1,
+            userAnswers.p2,
+            userAnswers.p3,
+            userAnswers.p4
+        ]),
 
-            score = Math.max(0, score);
+        elegance: avg([
+            userAnswers.e1,
+            userAnswers.e2,
+            userAnswers.e3,
+            userAnswers.e4
+        ]),
 
-            if (score > maxScore) {
-                maxScore = score;
-                bestPartner = char;
-            }
-        });
+        intelligence: avg([
+            userAnswers.i1,
+            userAnswers.i2,
+            userAnswers.i3,
+            userAnswers.i4
+        ]),
 
-        // 최종 매칭 결과 렌더링
-        res.render('result', { 
-            partner: bestPartner || characters[0], 
-            user: user,
-            chemistry: maxScore.toFixed(1) 
-        });
+        loyalty: avg([
+            userAnswers.l1,
+            userAnswers.l2,
+            userAnswers.l3,
+            userAnswers.l4
+        ]),
 
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('호환도 계산 중에 오류가 발생했습니다.');
-    }
+        freedom: avg([
+            userAnswers.f1,
+            userAnswers.f2,
+            userAnswers.f3,
+            userAnswers.f4
+        ])
+    };
+
+    let bestMatches = [];
+    let minDistance = Infinity;
+
+    characters.forEach(char => {
+
+        const distance = Math.sqrt(
+            Math.pow(userProfile.passion - char.scores.passion, 2) +
+            Math.pow(userProfile.elegance - char.scores.elegance, 2) +
+            Math.pow(userProfile.intelligence - char.scores.intelligence, 2) +
+            Math.pow(userProfile.loyalty - char.scores.loyalty, 2) +
+            Math.pow(userProfile.freedom - char.scores.freedom, 2)
+        );
+
+        if (distance < minDistance - 0.0001) {
+
+            minDistance = distance;
+            bestMatches = [char];
+
+        } else if (Math.abs(distance - minDistance) < 0.0001) {
+
+            bestMatches.push(char);
+        }
+    });
+
+    // 랜덤 선택
+    const finalMatch =
+        bestMatches[
+            Math.floor(Math.random() * bestMatches.length)
+        ];
+
+    // 최대 거리
+    const maxDistance = Math.sqrt(
+        10 ** 2 +
+        10 ** 2 +
+        10 ** 2 +
+        10 ** 2 +
+        10 ** 2
+    );
+
+    // 호환도 계산
+    const chemistry = Math.max(
+        0,
+        Math.round((1 - minDistance / maxDistance) * 100)
+    );
+
+    // 결과 렌더링
+    res.render('result', {
+        partner: finalMatch,
+        user: userProfile,
+        chemistry: chemistry
+    });
 });
 
-app.listen(3000, () => console.log('앙상블 스타즈 매칭 서버 시작! http://localhost:3000'));
+// 서버 실행
+const PORT = 3000;
+
+app.listen(PORT, () => {
+    console.log(`서버 실행중! http://localhost:${PORT}`);
+});
